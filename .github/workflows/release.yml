@@ -21,9 +21,11 @@ jobs:
         with:
           node-version: 20
           registry-url: https://registry.npmjs.org
-      - run: npm ci
+      # --ignore-scripts skips native gyp builds (e.g. isolated-vm, pulled in by
+      # n8n-workflow) that we don't need to build/lint/publish and that fail on CI.
+      - run: npm ci --ignore-scripts
       - run: npm run build
       - run: npm run lint -- --quiet
-      - run: npm publish --provenance --access public
+      - run: npm publish --provenance --access public --ignore-scripts
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

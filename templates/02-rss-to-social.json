@@ -1,0 +1,57 @@
+{
+  "name": "SocialClaw — Auto-post new RSS items to social",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": { "interval": [{ "field": "hours", "hoursInterval": 6 }] }
+      },
+      "id": "trigger-1",
+      "name": "Every 6 hours",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [240, 300]
+    },
+    {
+      "parameters": {
+        "url": "https://YOUR-BLOG.com/rss.xml"
+      },
+      "id": "rss-1",
+      "name": "Read RSS feed",
+      "type": "n8n-nodes-base.rssFeedRead",
+      "typeVersion": 1.1,
+      "position": [480, 300]
+    },
+    {
+      "parameters": {
+        "resource": "post",
+        "operation": "schedule",
+        "account": "REPLACE_WITH_ACCOUNT_ID",
+        "text": "=New post: {{ $json.title }}\n\n{{ $json.link }}",
+        "timezone": "UTC",
+        "postName": "=RSS: {{ $json.title }}"
+      },
+      "id": "socialclaw-1",
+      "name": "SocialClaw",
+      "type": "n8n-nodes-socialclaw.socialClaw",
+      "typeVersion": 1,
+      "position": [720, 300],
+      "credentials": {
+        "socialClawApi": {
+          "id": "REPLACE_WITH_CREDENTIAL_ID",
+          "name": "SocialClaw API"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Every 6 hours": {
+      "main": [[{ "node": "Read RSS feed", "type": "main", "index": 0 }]]
+    },
+    "Read RSS feed": {
+      "main": [[{ "node": "SocialClaw", "type": "main", "index": 0 }]]
+    }
+  },
+  "active": false,
+  "settings": {},
+  "meta": {}
+}

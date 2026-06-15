@@ -1,0 +1,42 @@
+{
+  "name": "SocialClaw — Schedule a post",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "trigger-1",
+      "name": "When clicking Test",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [260, 300]
+    },
+    {
+      "parameters": {
+        "resource": "post",
+        "operation": "schedule",
+        "account": "REPLACE_WITH_ACCOUNT_ID",
+        "text": "Hello from n8n + SocialClaw 🦅",
+        "timezone": "UTC",
+        "postName": "n8n demo post"
+      },
+      "id": "socialclaw-1",
+      "name": "SocialClaw",
+      "type": "n8n-nodes-socialclaw.socialClaw",
+      "typeVersion": 1,
+      "position": [520, 300],
+      "credentials": {
+        "socialClawApi": {
+          "id": "REPLACE_WITH_CREDENTIAL_ID",
+          "name": "SocialClaw API"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "When clicking Test": {
+      "main": [[{ "node": "SocialClaw", "type": "main", "index": 0 }]]
+    }
+  },
+  "active": false,
+  "settings": {},
+  "meta": {}
+}

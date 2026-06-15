@@ -1,0 +1,47 @@
+{
+  "name": "SocialClaw — Schedule a post from a webhook",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "socialclaw-post",
+        "options": {}
+      },
+      "id": "webhook-1",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [260, 300]
+    },
+    {
+      "parameters": {
+        "resource": "post",
+        "operation": "schedule",
+        "account": "REPLACE_WITH_ACCOUNT_ID",
+        "text": "={{ $json.body.text }}",
+        "publishAt": "={{ $json.body.publishAt }}",
+        "timezone": "UTC",
+        "postName": "Webhook post"
+      },
+      "id": "socialclaw-1",
+      "name": "SocialClaw",
+      "type": "n8n-nodes-socialclaw.socialClaw",
+      "typeVersion": 1,
+      "position": [520, 300],
+      "credentials": {
+        "socialClawApi": {
+          "id": "REPLACE_WITH_CREDENTIAL_ID",
+          "name": "SocialClaw API"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [[{ "node": "SocialClaw", "type": "main", "index": 0 }]]
+    }
+  },
+  "active": false,
+  "settings": {},
+  "meta": {}
+}

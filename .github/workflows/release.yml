@@ -1,0 +1,29 @@
+name: Publish (npm + provenance)
+
+# n8n verification (since May 2026) requires verified community nodes to be
+# published from GitHub Actions WITH provenance — not from a local machine.
+# Triggers on a published GitHub Release.
+
+on:
+  release:
+    types: [published]
+
+permissions:
+  contents: read
+  id-token: write # required so `npm publish --provenance` can mint the attestation
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          registry-url: https://registry.npmjs.org
+      - run: npm ci
+      - run: npm run build
+      - run: npm run lint -- --quiet
+      - run: npm publish --provenance --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
